@@ -1,27 +1,28 @@
-export type Address = {
-  street: string
-  city: string
-  country: string
-}
+export type TUserName = {
+  firstName: string;
+  lastName: string;
+};
+export type TAddress = {
+  street: string;
+  city: string;
+  country: string;
+};
 
-export type Orders = {
-  productName: string
-  price: number
-  quantity: number
-}
+export type TOrders = {
+  productName: string;
+  price: number;
+  quantity: number;
+};
 
-export type Users = {
-  userId: string
-  username: string
-  password: string
-  fullName: {
-    firstName: string
-    lastName: string
-  }
-  age: number
-  email: string
-  isActive: boolean
-  hobbies: string[]
-  address: Address
-  orders: Orders[]
-}
+export type TUsers = {
+  userId: number;
+  username: string;
+  password: string;
+  fullName: TUserName;
+  age: number;
+  email: string;
+  isActive: boolean;
+  hobbies: string[];
+  address: TAddress;
+  orders: TOrders[];
+};
