@@ -65,6 +65,7 @@ const UserSchema = new Schema<TUsers>({
   email: {
     type: String,
     required: true,
+    unique: true,
   },
   isActive: {
     type: Boolean,
