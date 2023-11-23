@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { Error } from 'mongoose';
 import { UserServices } from './user.services';
 import { UserSchemaValidate } from './user.validation';
 
@@ -122,9 +123,47 @@ const updateUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+// delete user
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await UserServices.getUserByUserId(Number(userId));
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+    const isDeleted = await UserServices.deleteUser(Number(userId));
+    if (isDeleted.deletedCount > 0) {
+      return res.status(200).json({
+        success: true,
+        message: 'User deleted successfully!',
+        data: null,
+      });
+    } else {
+      throw new Error('User deleted unsuccessful! please try agin');
+    }
+  } catch (error: any) {
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+      error: {
+        code: 500,
+        description: 'This is an server side error.',
+      },
+    });
+  }
+};
 export const UserController = {
   createUser,
   getAllUser,
   getUserByUserId,
   updateUser,
+  deleteUser,
 };

@@ -43,9 +43,16 @@ const updateUser = async (userId: number, userData: TUsers) => {
   const updatedData = await getUserByUserId(userId);
   return updatedData;
 };
+
+// delete user
+const deleteUser = async (userId: number) => {
+  const result = await User.deleteOne({ userId });
+  return result;
+};
 export const UserServices = {
   createUser,
   getAllUser,
   getUserByUserId,
   updateUser,
+  deleteUser,
 };
