@@ -7,6 +7,7 @@ import { UserSchemaValidate } from './user.validation';
 const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body;
+
     const ValidateData = UserSchemaValidate(userData);
 
     if ('error' in ValidateData) {
@@ -200,11 +201,56 @@ const updateOrder = async (req: Request, res: Response) => {
 const getOrdersByUserId = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
+    const existingUser = await UserServices.getUserByUserId(Number(userId));
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
     const result = await UserServices.getOrdersByUserId(Number(userId));
     return res.status(200).json({
       success: true,
       message: 'Order fetched  successfully!',
       data: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Something went wrong!',
+      error: {
+        code: 500,
+        description: 'This is an server side error.',
+      },
+    });
+  }
+};
+// get all orders by userId
+const calculateTotalPrice = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const existingUser = await UserServices.getUserByUserId(Number(userId));
+    if (!existingUser) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+    const result = await UserServices.calculateTotalPrice(Number(userId));
+    return res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: {
+        totalPrice: result,
+      },
     });
   } catch (error) {
     return res.status(500).json({
@@ -225,4 +271,5 @@ export const UserController = {
   deleteUser,
   updateOrder,
   getOrdersByUserId,
+  calculateTotalPrice,
 };

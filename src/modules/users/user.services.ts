@@ -60,6 +60,20 @@ const getOrdersByUserId = async (userId: number) => {
   const orders = await User.ordersByUserId(userId);
   return orders;
 };
+
+// calculate Total Price of Orders for a Specific User
+const calculateTotalPrice = async (userId: number) => {
+  const user: TUsers | null = await User.ordersByUserId(userId);
+
+  if (user && user.orders) {
+    const totalPrice = user.orders.reduce(
+      (totalPrice, order) => totalPrice + order.price * order.quantity,
+      0,
+    );
+
+    return totalPrice;
+  }
+};
 export const UserServices = {
   createUser,
   getAllUser,
@@ -68,4 +82,5 @@ export const UserServices = {
   deleteUser,
   updateOrder,
   getOrdersByUserId,
+  calculateTotalPrice,
 };
