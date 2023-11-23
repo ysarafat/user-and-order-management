@@ -108,6 +108,19 @@ UserSchema.statics.isUserExists = async function (userId: number) {
   return existingUser;
 };
 
+// order update middleware
+UserSchema.statics.updateOrder = async function (
+  userId: number,
+  orderData: TOrders,
+) {
+  const updateOrder = await User.findOneAndUpdate(
+    { userId: userId },
+    { $push: { orders: orderData } },
+    { new: true, upsert: true },
+  );
+  return updateOrder;
+};
+
 const User = model<TUsers, UserModel>('User', UserSchema);
 
 export default User;
