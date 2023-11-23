@@ -120,6 +120,7 @@ UserSchema.statics.updateOrder = async function (
   );
   return updateOrder;
 };
+// find order by userId
 UserSchema.statics.ordersByUserId = async function (userId: number) {
   const orders = await User.aggregate([
     { $match: { userId: userId } },
@@ -140,7 +141,7 @@ UserSchema.statics.ordersByUserId = async function (userId: number) {
       },
     },
   ]);
-  return orders.length > 0 ? orders[0] : null;
+  return orders.length > 0 ? orders[0] : 'Apnar kono order nai';
 };
 const User = model<TUsers, UserModel>('User', UserSchema);
 

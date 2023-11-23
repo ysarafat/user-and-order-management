@@ -4,6 +4,16 @@ import User from './user.model';
 // create user
 const createUser = async (user: TUsers) => {
   const newUser = new User(user);
+  const isExistingUser = await User.findOne({
+    $or: [{ userId: newUser.userId }, { username: newUser.username }],
+  });
+  if (
+    isExistingUser?.userId === newUser.userId ||
+    isExistingUser?.username === newUser.username
+  ) {
+    throw new Error('User already exist!');
+  }
+
   await newUser.save();
   const result = await User.findById(newUser._id).select({
     password: 0,
@@ -58,6 +68,10 @@ const updateOrder = async (userId: number, orderData: TOrders) => {
 // get all orders by user id
 const getOrdersByUserId = async (userId: number) => {
   const orders = await User.ordersByUserId(userId);
+
+  if (orders?.orders?.length === 0) {
+    return 'Order has not been found';
+  }
   return orders;
 };
 
@@ -71,7 +85,7 @@ const calculateTotalPrice = async (userId: number) => {
       0,
     );
 
-    return totalPrice;
+    return totalPrice.toFixed(2);
   }
 };
 export const UserServices = {

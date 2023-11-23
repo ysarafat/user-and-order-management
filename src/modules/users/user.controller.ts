@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Error } from 'mongoose';
+import { OrderSchemaValidation } from './user.order.validation';
 import { UserServices } from './user.services';
 import { UserSchemaValidate } from './user.validation';
 
@@ -7,9 +8,7 @@ import { UserSchemaValidate } from './user.validation';
 const createUser = async (req: Request, res: Response) => {
   try {
     const { user: userData } = req.body;
-
     const ValidateData = UserSchemaValidate(userData);
-
     if ('error' in ValidateData) {
       return res.status(200).json({
         success: false,
@@ -27,13 +26,13 @@ const createUser = async (req: Request, res: Response) => {
       message: 'User Created Successfully',
       data: result,
     });
-  } catch (error) {
+  } catch (error: any) {
     return res.status(500).json({
       success: false,
-      message: 'Something went wrong!',
+      message: error.message || 'Something went wrong!',
       error: {
         code: 500,
-        description: 'This is an server side error.',
+        description: error.message || 'This is an server side error.',
       },
     });
   }
@@ -178,6 +177,17 @@ const updateOrder = async (req: Request, res: Response) => {
       });
     }
     const { order: orderData } = req.body;
+    const ValidateData = OrderSchemaValidation(orderData);
+    if ('error' in ValidateData) {
+      return res.status(200).json({
+        success: false,
+        message: ValidateData.errorMessage as string,
+        error: {
+          code: 499,
+          description: ValidateData.errorMessage as string,
+        },
+      });
+    }
     const result = await UserServices.updateOrder(Number(userId), orderData);
     if (result) {
       return res.status(200).json({
