@@ -31,4 +31,10 @@ const getAllUser = async () => {
   });
   return result;
 };
-export const UserServices = { createUser, getAllUser };
+
+// get user by userId
+const getUserByUserId = async (userId: number) => {
+  const existingUser = await User.isUserExists(userId);
+  return existingUser;
+};
+export const UserServices = { createUser, getAllUser, getUserByUserId };

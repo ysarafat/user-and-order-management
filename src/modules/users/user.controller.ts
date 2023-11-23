@@ -57,4 +57,35 @@ const getAllUser = async (req: Request, res: Response) => {
     });
   }
 };
-export const UserController = { createUser, getAllUser };
+//  get user by userId
+const getUserByUserId = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await UserServices.getUserByUserId(Number(userId));
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: 'User fetched successfully!',
+      data: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Something went wrong!',
+      error: {
+        code: 500,
+        description: 'This is an server side error.',
+      },
+    });
+  }
+};
+export const UserController = { createUser, getAllUser, getUserByUserId };

@@ -1,6 +1,12 @@
 import bcrypt from 'bcrypt';
 import { Schema, model } from 'mongoose';
-import { TAddress, TOrders, TUserName, TUsers } from './user.interface';
+import {
+  TAddress,
+  TOrders,
+  TUserName,
+  TUsers,
+  UserModel,
+} from './user.interface';
 const UserNameSchema = new Schema<TUserName>({
   firstName: {
     type: String,
@@ -39,7 +45,7 @@ const OrderSchema = new Schema<TOrders>({
     required: true,
   },
 });
-const UserSchema = new Schema<TUsers>({
+const UserSchema = new Schema<TUsers, UserModel>({
   userId: {
     type: Number,
     required: true,
@@ -83,11 +89,28 @@ const UserSchema = new Schema<TUsers>({
     type: [OrderSchema],
   },
 });
+
 // pre save middleware
 UserSchema.pre('save', async function () {
   this.password = await bcrypt.hash(this.password, 10);
 });
 
-const User = model<TUsers>('User', UserSchema);
+// custom statics methods
+UserSchema.statics.isUserExists = async function (userId: number) {
+  const existingUser = await User.findOne({ userId }).select({
+    username: 1,
+    'fullName.firstName': 1,
+    'fullName.lastName': 1,
+    age: 1,
+    email: 1,
+    'address.street': 1,
+    'address.city': 1,
+    'address.country': 1,
+    _id: 0,
+  });
+  return existingUser;
+};
+
+const User = model<TUsers, UserModel>('User', UserSchema);
 
 export default User;
