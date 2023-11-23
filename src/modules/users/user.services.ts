@@ -37,4 +37,15 @@ const getUserByUserId = async (userId: number) => {
   const existingUser = await User.isUserExists(userId);
   return existingUser;
 };
-export const UserServices = { createUser, getAllUser, getUserByUserId };
+// update user
+const updateUser = async (userId: number, userData: TUsers) => {
+  await User.updateOne({ userId }, userData);
+  const updatedData = await getUserByUserId(userId);
+  return updatedData;
+};
+export const UserServices = {
+  createUser,
+  getAllUser,
+  getUserByUserId,
+  updateUser,
+};

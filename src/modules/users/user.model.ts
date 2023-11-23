@@ -98,15 +98,12 @@ UserSchema.pre('save', async function () {
 // custom statics methods
 UserSchema.statics.isUserExists = async function (userId: number) {
   const existingUser = await User.findOne({ userId }).select({
-    username: 1,
-    'fullName.firstName': 1,
-    'fullName.lastName': 1,
-    age: 1,
-    email: 1,
-    'address.street': 1,
-    'address.city': 1,
-    'address.country': 1,
     _id: 0,
+    password: 0,
+    'fullName._id': 0,
+    'address._id': 0,
+    orders: 0,
+    __v: 0,
   });
   return existingUser;
 };
