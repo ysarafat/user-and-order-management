@@ -55,6 +55,11 @@ const updateOrder = async (userId: number, orderData: TOrders) => {
   const update = await User.updateOrder(Number(userId), orderData);
   return update;
 };
+// get all orders by user id
+const getOrdersByUserId = async (userId: number) => {
+  const orders = await User.ordersByUserId(userId);
+  return orders;
+};
 export const UserServices = {
   createUser,
   getAllUser,
@@ -62,4 +67,5 @@ export const UserServices = {
   updateUser,
   deleteUser,
   updateOrder,
+  getOrdersByUserId,
 };

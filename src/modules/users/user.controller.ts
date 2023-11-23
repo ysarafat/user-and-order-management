@@ -196,6 +196,27 @@ const updateOrder = async (req: Request, res: Response) => {
     });
   }
 };
+// get all orders by userId
+const getOrdersByUserId = async (req: Request, res: Response) => {
+  try {
+    const { userId } = req.params;
+    const result = await UserServices.getOrdersByUserId(Number(userId));
+    return res.status(200).json({
+      success: true,
+      message: 'Order fetched  successfully!',
+      data: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: 'Something went wrong!',
+      error: {
+        code: 500,
+        description: 'This is an server side error.',
+      },
+    });
+  }
+};
 export const UserController = {
   createUser,
   getAllUser,
@@ -203,4 +224,5 @@ export const UserController = {
   updateUser,
   deleteUser,
   updateOrder,
+  getOrdersByUserId,
 };

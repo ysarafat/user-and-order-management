@@ -120,7 +120,28 @@ UserSchema.statics.updateOrder = async function (
   );
   return updateOrder;
 };
-
+UserSchema.statics.ordersByUserId = async function (userId: number) {
+  const orders = await User.aggregate([
+    { $match: { userId: userId } },
+    {
+      $project: {
+        _id: 0,
+        orders: {
+          $map: {
+            input: '$orders',
+            as: 'order',
+            in: {
+              productName: '$$order.productName',
+              price: '$$order.price',
+              quantity: '$$order.quantity',
+            },
+          },
+        },
+      },
+    },
+  ]);
+  return orders.length > 0 ? orders[0] : null;
+};
 const User = model<TUsers, UserModel>('User', UserSchema);
 
 export default User;
