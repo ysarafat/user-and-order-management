@@ -97,7 +97,7 @@ const calculateTotalPrice = async (userId: number) => {
       },
     },
   ]);
-  return orders[0].totalPrice;
+  return parseFloat(orders[0].totalPrice.toFixed(2));
 };
 export const UserServices = {
   createUser,
