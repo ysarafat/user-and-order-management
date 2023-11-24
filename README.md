@@ -13,7 +13,7 @@ Before you begin, ensure that you have the following prerequisites installed on 
 ## Installation Steps
 
 1.  **Clone the Repository:**
-    Clone the "Book Stack" repository to your local machine.
+    Clone the "user-and-order-management" repository to your local machine.
 
     ```bash
     git clone <repository-url>
