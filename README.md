@@ -231,4 +231,86 @@ To interact with `user-and-order-management` using Postman, follow these steps:
    }
    ```
 
+### Access user oder menagement
+
+1. **Update order by userId using `PUT` method**
+
+   ```url
+   https://user-and-order-management.vercel.app/api/users/:userId/orders
+   ```
+
+   **_Request body_**
+
+   ```json
+   {
+     "productName": "string",
+     "price": "number",
+     "quantity": "number"
+   }
+   ```
+
+   **_Response body_**
+
+   ```json
+   {
+     "success": true,
+     "message": "Order created successfully!",
+     "data": null
+   }
+   ```
+
+1. **Get All order by userId using `get` method**
+
+   ```url
+   https://user-and-order-management.vercel.app/api/users/:userId/orders
+   ```
+
+   **_Request body_**
+
+   ```json
+   {
+     "productName": "string",
+     "price": "number",
+     "quantity": "number"
+   }
+   ```
+
+   **_Response body_**
+
+   ```json
+   {
+     "success": true,
+     "message": "Order created successfully!",
+     "data": null
+   }
+   ```
+
+1. **Get total price of order by userId using `get` method**
+
+   ```url
+   https://user-and-order-management.vercel.app/api/users/:userId/orders/total-price
+   ```
+
+   **_Request body_**
+
+   ```json
+   {
+     "productName": "string",
+     "price": "number",
+     "quantity": "number"
+   }
+   ```
+
+   **_Response body_**
+
+   ```json
+   {
+     "success": true,
+     "message": "Total price calculated successfully!",
+     "data": {
+       "totalPrice": 154.99
+     }
+   }
+   ```
+
 By following these steps, you can use Postman to interact with your "user-and-order-management" API, making requests and testing different features of the application. Make sure your "user-and-order-management" server is running and accessible at the specified URL before using Postman to access it.
