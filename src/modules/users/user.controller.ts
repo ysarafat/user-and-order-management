@@ -7,7 +7,7 @@ import { UserSchemaValidate } from './user.validation';
 // create user
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user: userData } = req.body;
+    const userData = req.body;
     const ValidateData = UserSchemaValidate(userData);
     if ('error' in ValidateData) {
       return res.status(200).json({
@@ -105,7 +105,7 @@ const updateUser = async (req: Request, res: Response) => {
       });
     }
     // update user data
-    const { user: userData } = req.body;
+    const userData = req.body;
     const updatedData = await UserServices.updateUser(Number(userId), userData);
     res.status(200).json({
       success: true,
@@ -176,7 +176,7 @@ const updateOrder = async (req: Request, res: Response) => {
         },
       });
     }
-    const { order: orderData } = req.body;
+    const orderData = req.body;
     const ValidateData = OrderSchemaValidation(orderData);
     if ('error' in ValidateData) {
       return res.status(200).json({
