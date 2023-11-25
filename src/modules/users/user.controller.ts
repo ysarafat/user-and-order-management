@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { Error } from 'mongoose';
 import { OrderSchemaValidation } from './user.order.validation';
 import { UserServices } from './user.services';
+import { UserUpdateSchemaValidate } from './user.update.validation';
 import { UserSchemaValidate } from './user.validation';
 
 // create user
@@ -106,7 +107,21 @@ const updateUser = async (req: Request, res: Response) => {
     }
     // update user data
     const userData = req.body;
-    const updatedData = await UserServices.updateUser(Number(userId), userData);
+    const ValidateData = UserUpdateSchemaValidate(userData);
+    const updatedData = await UserServices.updateUser(
+      Number(userId),
+      ValidateData,
+    );
+    if ('error' in ValidateData) {
+      return res.status(200).json({
+        success: false,
+        message: ValidateData.errorMessage as string,
+        error: {
+          code: 499,
+          description: ValidateData.errorMessage as string,
+        },
+      });
+    }
     res.status(200).json({
       success: true,
       message: 'User updated successfully!',

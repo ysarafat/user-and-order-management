@@ -48,10 +48,22 @@ const getUserByUserId = async (userId: number) => {
   return existingUser;
 };
 // update user
-const updateUser = async (userId: number, userData: TUsers) => {
-  await User.updateOne({ userId }, userData);
-  const updatedData = await getUserByUserId(userId);
-  return updatedData;
+const updateUser = async (userId: number, userData: TUsers | object) => {
+  await User.aggregate([
+    { $match: { userId } },
+    {
+      $set: userData,
+    },
+    {
+      $merge: {
+        into: 'users',
+        whenMatched: 'merge',
+        whenNotMatched: 'fail',
+      },
+    },
+  ]);
+  const updatedUser = await getUserByUserId(userId);
+  return updatedUser;
 };
 
 // delete user
